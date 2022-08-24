@@ -73,6 +73,8 @@ class ActiveRecord {
     // Sanitizar los datos antes de guardarlos en la BD
     public function sanitizarAtributos() {
         $atributos = $this->atributos();
+
+     
         $sanitizado = [];
         foreach($atributos as $key => $value ) {
             $sanitizado[$key] = self::$db->escape_string($value);
@@ -116,12 +118,27 @@ class ActiveRecord {
         return array_shift( $resultado ) ;
     }
 
+    //Obtiene columna y con valor en específico.
+    public static function where($columna,$valor) {
+        $query = "SELECT * FROM " . static::$tabla  ." WHERE ${columna} = '${valor}'";
+        $resultado = self::consultarSQL($query);
+        return array_shift( $resultado ) ;
+    }
+
+    //Consulta plana de SQL(Utilizar cuando los método no son suficientes)
+    public static function SQL($consulta) {
+        $query = $consulta;
+        $resultado = self::consultarSQL($query);
+        return  $resultado;
+    }
+
     // Obtener Registros con cierta cantidad
     public static function get($limite) {
         $query = "SELECT * FROM " . static::$tabla . " LIMIT ${limite}";
         $resultado = self::consultarSQL($query);
         return array_shift( $resultado ) ;
     }
+
 
     // crea un nuevo registro
     public function crear() {
@@ -134,9 +151,11 @@ class ActiveRecord {
         $query .= " ) VALUES (' "; 
         $query .= join("', '", array_values($atributos));
         $query .= " ') ";
-
+        
+    
         // Resultado de la consulta
         $resultado = self::$db->query($query);
+
         return [
            'resultado' =>  $resultado,
            'id' => self::$db->insert_id
