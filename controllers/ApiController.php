@@ -45,7 +45,7 @@ class APIController{
             $id=$_POST['id'];
             $cita=Cita::find($id);
             $cita->eliminar();
-            header('Location:'.$_SERVER['HTTP_REFERER']);
+            header('Location:'.$_SERVER['HTTP_REFERER']); //Retorna a la ruta previamente ingresada.
         }
     }
 }

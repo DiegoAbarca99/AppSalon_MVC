@@ -1,2 +1,7 @@
-node_modules
-/vendor/
+node_modules/
+vendor/
+src/
+gulpfile.js
+package-lock.json
+.env
+appsalon_mvc.sql
